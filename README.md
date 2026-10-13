@@ -46,7 +46,7 @@ Get these by hand and put them in the folder shown.
 - The lab keeps Zimmerman's tools in `ZimmermanTools\net6\`. `Get-ZimmermanTools.ps1` accepts only `-NetVersion` 0, 4 or 9, so this kit writes `ZimmermanTools\net9\`. Writeup paths that name `net6` need `net9` here.
 - The lab has a `Memory Analysis\MemProcFS` folder. FLARE-VM installs MemProcFS under `C:\Tools`, so this kit puts a MemProcFS shortcut in `Memory Analysis` instead.
 - The lab's Tools folder holds a mix of folders and loose executables such as `floss.exe`. This kit copies FLARE shortcuts, so most entries are `.lnk` files.
-- GitHub archive downloads, such as RegRipper 3.0, unpack into a `<repo>-master` subfolder, and Volatility 2.6 unpacks into its own subfolder.
+- GitHub archive downloads unpack into a subfolder named after the repo and commit, such as `RegRipper3.0\RegRipper3.0-ec96dd4...`. Volatility 2.6, rifiuti2 and ClamAV also unpack into their own subfolders.
 - FLARE-VM's upstream config, which this kit keeps unchanged apart from the package list, turns off Windows Firewall and adds seven system locales.
 - Zui ships only an installer for Windows. The script saves `Zui-Setup-<version>.exe` in `Network Analysis\Zui`, and you run it.
 - The script does not check ClamAV's GPG signature because the VM has no gpg. To check it, fetch `https://www.clamav.net/downloads/production/clamav-1.5.4.win.x64.zip.sig` and verify it with the Talos key on another machine.
@@ -58,7 +58,7 @@ Get these by hand and put them in the folder shown.
 All 28 downloadable sources resolved on 13 Oct 2026. Each GitHub API query found its asset, and each URL returned HTTP 200 or a redirect to the file. Two hosts need special handling, and the script provides it:
 
 - NirSoft returns a 403 page for PasswordFox unless the request carries a Referer.
-- SourceForge sends an HTML page instead of the DiffUtils zip to browser User-Agents.
+- SourceForge sends an HTML page instead of the DiffUtils zip when the request carries a browser User-Agent or a Referer, so the script sends the Referer to nirsoft.net only.
 
 Two gated pages fail to scripts but work in a browser. Kroll's KAPE page returns 403 to scripted requests because of Cloudflare, and the old USB Forensic Tracker product page returns 404.
 

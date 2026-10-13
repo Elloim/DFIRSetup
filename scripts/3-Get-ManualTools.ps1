@@ -45,9 +45,11 @@ function Save-Download($Tool, [string]$Url) {
     $dir = Join-Path $cache $Tool.name
     New-Item -ItemType Directory -Force -Path $dir | Out-Null
     $file = Join-Path $dir ([IO.Path]::GetFileName(([uri]$Url).AbsolutePath))
-    # NirSoft refuses downloads without a Referer, and SourceForge sends an HTML
-    # page instead of the file to browser User-Agents. Other hosts ignore both.
-    Invoke-WebRequest -UseBasicParsing -Uri $Url -OutFile $file -Headers @{ Referer = $Url } -UserAgent 'cd-dfir-vm'
+    # NirSoft refuses downloads without a Referer. SourceForge sends an HTML page
+    # instead of the file to browser User-Agents or to requests with a Referer.
+    $headers = @{}
+    if ($Url -match '^https?://(www\.)?nirsoft\.net/') { $headers.Referer = $Url }
+    Invoke-WebRequest -UseBasicParsing -Uri $Url -OutFile $file -Headers $headers -UserAgent 'cd-dfir-vm'
     $hash = (Get-FileHash -Path $file -Algorithm SHA256).Hash
     Add-Content -Path $log -Value ("{0:s}`t{1}`t{2}`t{3}" -f (Get-Date), $Tool.name, $Url, $hash)
     Write-Verbose "$($Tool.name): $Url SHA256 $hash"
@@ -88,7 +90,7 @@ function Expand-Download($Tool, [string]$File, [string]$Dest) {
 $failed = 0
 foreach ($tool in (Get-Content -Raw -Path $Manifest | ConvertFrom-Json)) {
     $dest = if ($tool.kind -eq 'pip') { 'python -m pip' } elseif ($tool.folder) { Join-Path $ToolsRoot $tool.folder } else { '' }
-    $row = [pscustomobject]@{ Name = $tool.name; Kind = $tool.kind; Destination = $dest; Action = '' }
+    $row = [pscustomobject]@{ Name = $tool.name; Kind = $tool.kind; Action = ''; Destination = $dest }
 
     if ($tool.kind -eq 'gated') {
         $row.Action = "download by hand from $($tool.source)"
