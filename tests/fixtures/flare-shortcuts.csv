@@ -1,0 +1,18 @@
+Category,Shortcut,Expected
+Forensic,FTK Imager,Disk Forensics
+Forensic,TimelineExplorer,Log Analysis
+Java and Android,jadx-gui,Miscellaneous
+File Information,floss,Miscellaneous
+Forensic,ALEAPP,Mobile Forensics
+File Information,die,Malware Analysis
+Networking,Wireshark,Network Analysis
+Registry,Registry Explorer,Registry
+Forensic,RLA,Registry
+Forensic,MemProcFS,Memory Analysis
+Memory,pe-sieve,Memory Analysis
+Java and Android,apktool,Mobile Forensics
+Utilities,CyberChef,Miscellaneous
+Utilities,DB Browser for SQLite,Miscellaneous
+Forensic,Hayabusa,Log Analysis
+PE,pestudio,Malware Analysis
+Productivity Tools,Notepad++,Miscellaneous
